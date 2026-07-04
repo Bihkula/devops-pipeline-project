@@ -1,0 +1,8 @@
+# Default owner for everything in the repo
+* @Bihkula
+
+# Terraform changes require the same review discipline
+/terraform/ @Bihkula
+
+# Kubernetes/RBAC manifests
+/k8s/ @Bihkula
