@@ -14,3 +14,6 @@ id_rsa*
 # OS/editor junk
 .DS_Store
 .vscode/
+
+# Node.js
+node_modules/
