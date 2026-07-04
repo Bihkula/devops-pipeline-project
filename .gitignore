@@ -1,0 +1,16 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# SSH keys — never commit these
+*.pem
+id_rsa*
+*-key
+*-key.pub
+
+# OS/editor junk
+.DS_Store
+.vscode/
