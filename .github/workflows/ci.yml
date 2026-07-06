@@ -64,7 +64,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build image
-        run: docker build -t $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }} ./app
+        run: |
+          docker build \
+            -t $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }} \
+            -t $REGISTRY/${{ steps.image.outputs.name }}:latest \
+            ./app
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@master
@@ -80,13 +84,17 @@ jobs:
           format: spdx-json
           output-file: sbom.spdx.json
 
-      - name: Push image
-        run: docker push $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }}
+      - name: Push images
+        run: |
+          docker push $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }}
+          docker push $REGISTRY/${{ steps.image.outputs.name }}:latest
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
 
-      - name: Sign image with Cosign (keyless)
+      - name: Sign images with Cosign (keyless)
         env:
           COSIGN_EXPERIMENTAL: "1"
-        run: cosign sign --yes $REGISTRY/${{ steps.image.outputs.name }}@$(docker inspect --format='{{index .RepoDigests 0}}' $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }} | cut -d@ -f2)
+        run: |
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $REGISTRY/${{ steps.image.outputs.name }}:${{ github.sha }} | cut -d@ -f2)
+          cosign sign --yes $REGISTRY/${{ steps.image.outputs.name }}@$DIGEST
