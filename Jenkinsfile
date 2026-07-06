@@ -8,11 +8,10 @@ kind: Pod
 spec:
   containers:
   - name: kubectl
-    image: bitnami/kubectl:latest
+    image: alpine/k8s:1.35.0
     command:
-    - sleep
-    args:
-    - 99d
+    - cat
+    tty: true
 '''
         }
     }
