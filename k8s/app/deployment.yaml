@@ -17,8 +17,6 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
-      imagePullSecrets:
-      - name: ghcr-secret
       containers:
       - name: demo-app
         image: ghcr.io/bihkula/devops-pipeline-project:latest
